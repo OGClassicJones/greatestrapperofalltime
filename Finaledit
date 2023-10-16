@@ -1,0 +1,74 @@
+import tkinter as tk
+
+def get_favorite_rappers(window):
+    favorite_rappers = {}
+
+    def save_rapper():
+        name = name_entry.get()
+        bar = bar_entry.get("1.0", "end-1c")  # Get the text from the Text widget
+        ranking = int(rank_var.get())
+
+        favorite_rappers[name] = {
+            "bar": bar,
+            "ranking": ranking
+        }
+
+        name_entry.delete(0, "end")  # Clear the name entry
+        bar_entry.delete("1.0", "end")  # Clear the bar entry
+        rank_var.set("1")  # Reset the ranking dropdown
+
+    def submit_answers():
+        # Create a new window for displaying the answers
+        window2 = tk.Toplevel(window)
+        window2.title("50 Years of Hip Hop")
+        window2.geometry("400x400")
+        window2.configure(bg="green")
+
+        # Display the user's answers from Window 1 in Window 2
+        tk.Label(window2, text="Your Answers:", bg="blue", fg="white").pack()
+        for rapper, data in favorite_rappers.items():
+            tk.Label(window2, text=f"Rapper: {rapper}", bg="blue", fg="white").pack()
+            tk.Label(window2, text=f"Bar:\n{data['bar']}", bg="blue", fg="white").pack()
+            tk.Label(window2, text=f"Ranking: {data['ranking']}", bg="blue", fg="white").pack()
+            tk.Label(window2, text="-" * 30, bg="blue", fg="white").pack()
+
+    for i in range(5):
+        frame = tk.Frame(window, bg="blue")
+        frame.pack(pady=10)
+
+        tk.Label(frame, text=f"Favorite Rapper #{i+1}:", bg="blue", fg="white").pack()
+        tk.Label(frame, text="Name:", bg="blue", fg="white").pack()
+        name_entry = tk.Entry(frame)
+        name_entry.pack()
+
+        tk.Label(frame, text="Bar:", bg="blue", fg="white").pack()
+        bar_entry = tk.Text(frame, height=2, width=30)
+        bar_entry.pack()
+
+        tk.Label(frame, text="Rank (1-5):", bg="blue", fg="white").pack()
+        rank_var = tk.StringVar()
+        rank_var.set("1")
+        rank_dropdown = tk.OptionMenu(frame, rank_var, "1", "2", "3", "4", "5")
+        rank_dropdown.pack()
+
+    # Add a "Submit" button to show the user's answers in Window 2
+    submit_button = tk.Button(window, text="Submit", command=submit_answers)
+    submit_button.pack()
+
+    return favorite_rappers
+
+def main():
+    window = tk.Tk()
+    window.title("Who's The GOAT?")
+    window.geometry("400x400")
+    window.configure(bg="green")
+
+    label1 = tk.Label(window, text="Answer the following questions about your favorite rappers:", bg="blue", fg="white")
+    label1.pack()
+
+    favorite_rappers1 = get_favorite_rappers(window)
+
+    window.mainloop()
+
+if __name__ == "__main__":
+    main()
